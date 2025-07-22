@@ -1,0 +1,30 @@
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+
+ENTITY mux8to1_8bit IS
+    PORT(
+        i0, i1, i2, i3, i4, i5, i6, i7 : IN  STD_LOGIC_VECTOR(7 DOWNTO 0);
+        select                         : IN  STD_LOGIC_VECTOR(2 DOWNTO 0);
+        o_data                         : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+    );
+END mux8to1_8bit;
+
+ARCHITECTURE structural OF mux8to1_8bit IS
+    TYPE mux_array IS ARRAY (0 TO 7) OF STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SIGNAL mux_inputs : mux_array;
+BEGIN
+    -- Assign input values to array
+    mux_inputs(0) <= i0;
+    mux_inputs(1) <= i1;
+    mux_inputs(2) <= i2;
+    mux_inputs(3) <= i3;
+    mux_inputs(4) <= i4;
+    mux_inputs(5) <= i5;
+    mux_inputs(6) <= i6;
+    mux_inputs(7) <= i7;
+    
+    -- Generate multiplexer logic
+    GEN_MUX: FOR i IN 0 TO 7 GENERATE
+        o_data <= mux_inputs(i) WHEN select = STD_LOGIC_VECTOR(TO_UNSIGNED(i,3)) ELSE o_data;
+    END GENERATE GEN_MUX;
+END structural;
